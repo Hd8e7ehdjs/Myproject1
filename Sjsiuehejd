@@ -41,7 +41,7 @@ ButtonCorner.Parent = MinimizeButton
 -- Criando a interface a ser minimizada (MainFrame)
 -- Lista de nomes proibidos (blacklist)
 local blacklist = {
-    "username",
+    "00epa3",
     "usernane",
     
 }
