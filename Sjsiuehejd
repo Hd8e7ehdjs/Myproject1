@@ -28,8 +28,8 @@ MinimizeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Botão vermelho
 MinimizeButton.Size = UDim2.new(0, 30, 0, 30) -- Tamanho ajustado do botão
 MinimizeButton.Position = UDim2.new(0.5, -15, 0.5, -15) -- Centraliza o botão no DraggableFrame
 MinimizeButton.Font = Enum.Font.SourceSans
-MinimizeButton.Text = "-"
-MinimizeButton.TextSize = 20 -- Tamanho do texto 20
+MinimizeButton.Text = "━"
+MinimizeButton.TextSize = 25 -- Tamanho do texto 20
 MinimizeButton.TextColor3 = Color3.new(1, 1, 1) -- Texto branco
 MinimizeButton.BorderSizePixel = 0
 
