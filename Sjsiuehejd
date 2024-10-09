@@ -42,7 +42,7 @@ ButtonCorner.Parent = MinimizeButton
 -- Lista de nomes proibidos (blacklist)
 local blacklist = {
     "00epa3",
-    "usernane",
+    "Zqzxyy",
     
 }
 -- Função para verificar se o jogador está na blacklist
