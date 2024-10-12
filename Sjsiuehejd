@@ -45,13 +45,14 @@ local blacklist = {
     "Zqzxyy",
     "ob9i",
     "bigger_n123",
+    "bitsproxy",
     
 }
 -- Função para verificar se o jogador está na blacklist
 local function checkBlacklist(player)
     for _, name in ipairs(blacklist) do
         if player.Name == name then
-            player:Kick("You are on black list")
+            player:Kick("You Stupid, You're On The Black List, Idiot ")
             return true
         end
     end
