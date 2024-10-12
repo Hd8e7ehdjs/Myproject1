@@ -43,6 +43,8 @@ ButtonCorner.Parent = MinimizeButton
 local blacklist = {
     "00epa3",
     "Zqzxyy",
+    "ob9i",
+    "bigger_n123",
     
 }
 -- Função para verificar se o jogador está na blacklist
