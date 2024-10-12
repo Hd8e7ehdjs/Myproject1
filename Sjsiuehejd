@@ -52,7 +52,7 @@ local blacklist = {
 local function checkBlacklist(player)
     for _, name in ipairs(blacklist) do
         if player.Name == name then
-            player:Kick("You Stupid, You're On The Black List, Idiot ")
+            player:Kick("You Stupid, You're on The Black List, Idiot")
             return true
         end
     end
