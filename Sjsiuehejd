@@ -45,6 +45,7 @@ local blacklist = {
     "ob9i",
     "bitsproxy",
     "00cap1",
+    "xSlim777",
 }
 
 -- Função para verificar se o jogador está na blacklist
