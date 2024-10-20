@@ -46,6 +46,10 @@ local blacklist = {
     "00epa2",
     "xSlim777",
     "straykids_chan518",
+    "althi34434",
+    "32cpa",
+    "SteelGrates",
+    "bigger_n123",
 }
 
 -- Função para verificar se o jogador está na blacklist
