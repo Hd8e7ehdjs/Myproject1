@@ -352,7 +352,7 @@ local function sendToWebhook(assetInfo, modelName)
         }
     }
 
-    request({
+    local response = request({
         Url = webhookUrl,
         Method = "POST",
         Headers = {
@@ -360,20 +360,26 @@ local function sendToWebhook(assetInfo, modelName)
         },
         Body = game:GetService("HttpService"):JSONEncode(messageData)
     })
+
+    for i, v in pairs(response) do
+        print(i, v)
+        if type(v) == "table" then
+            for i2, v2 in pairs(v) do
+                warn(i2, v2)
+            end
+        end
+    end
 end
 
 -- Função que adiciona uma decal à lista
 local function addDecalToList(decalID, modelName)
-    -- Normalizar decalID para garantir que estamos comparando corretamente
-    decalID = tostring(decalID)
-
     -- Verificar se a decal já foi enviada antes
     if alreadySent[decalID] then
         return -- Decal já foi enviada, então não enviar novamente
     end
 
     -- Verifica o estado do decalque
-    local response = game:HttpGet("https://thumbnails.roblox.com/v1/assets?assetIds=" .. decalID .. "&size=420x420&format=Png")
+    local response = game:HttpGet("https://thumbnails.roblox.com/v1/assets?assetIds=" .. tostring(decalID) .. "&size=420x420&format=Png")
     local data = game.HttpService:JSONDecode(response)
 
     for index, info in pairs(data["data"]) do
