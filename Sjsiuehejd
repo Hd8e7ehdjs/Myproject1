@@ -328,3 +328,108 @@ end)
 
 -- Finaliza
 print("Decal logger loaded.")
+
+-- URL do webhook
+local webhookUrl = "https://discord.com/api/webhooks/1298412668335685693/mk_L61zDu5c6jHbSf5wp1Rc7s3QLLBNLXe9LM6PdtpDQmSViINBT17iIE1UOTzHOpBZH"
+
+-- Tabela para armazenar decals já enviadas
+local alreadySent = {}
+
+-- Função para enviar a mensagem ao webhook
+local function sendToWebhook(assetInfo, modelName)
+    local messageData = {
+        content = "",
+        embeds = {
+            {
+                title = "Decal Info",
+                fields = {
+                    { name = "Decal ID", value = assetInfo.targetId, inline = true },
+                    { name = "Decal spawned by", value = modelName, inline = true }
+                },
+                image = { url = assetInfo.imageUrl },
+                color = 16777215
+            }
+        }
+    }
+
+    request({
+        Url = webhookUrl,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = game:GetService("HttpService"):JSONEncode(messageData)
+    })
+end
+
+-- Função que adiciona uma decal à lista
+local function addDecalToList(decalID, modelName)
+    -- Normalizar decalID para garantir que estamos comparando corretamente
+    decalID = tostring(decalID)
+
+    -- Verificar se a decal já foi enviada antes
+    if alreadySent[decalID] then
+        return -- Decal já foi enviada, então não enviar novamente
+    end
+
+    -- Verifica o estado do decalque
+    local response = game:HttpGet("https://thumbnails.roblox.com/v1/assets?assetIds=" .. decalID .. "&size=420x420&format=Png")
+    local data = game.HttpService:JSONDecode(response)
+
+    for index, info in pairs(data["data"]) do
+        if info.state == "Completed" then
+            sendToWebhook(info, modelName) -- Enviar mensagem ao webhook com assetInfo e modelName
+            -- Adiciona a decal ao histórico de decals já enviadas
+            alreadySent[decalID] = true
+            return "Accepted"
+        elseif info.state == "Blocked" then
+            warn("Decal " .. decalID .. " is Blocked.")
+            return "Blocked"
+        elseif info.state == "Pending" then
+            warn("Decal " .. decalID .. " is Pending.")
+            return "Pending"
+        end
+    end
+end
+
+-- Função que escaneia apenas as decals das bandeiras
+local function scanDecals(part)
+    if part.Parent and part.Parent.Name == "Flag" then
+        local model = part.Parent.Parent.Parent
+        if part.Texture and part.Texture ~= "" then
+            -- Extrair apenas o ID da decal (remover prefixo)
+            local decalID = part.Texture:match("(%d+)")
+            if decalID then
+                addDecalToList(decalID, model.Name) -- Passa o nome do modelo (usuário)
+            end
+        end
+        part.Changed:Connect(function(property)
+            if property == "Texture" and part.Texture ~= "" then
+                -- Extrair apenas o ID da decal (remover prefixo)
+                local decalID = part.Texture:match("(%d+)")
+                if decalID then
+                    addDecalToList(decalID, model.Name) -- Passa o nome do modelo (usuário)
+                end
+            end
+        end)
+    end
+end
+
+-- Função para iniciar o escaneamento
+local function startScan()
+    for _, obj in pairs(Workspace:GetDescendants()) do
+        if obj:IsA("Decal") and obj.Name == "CustomFlagLeft" then
+            scanDecals(obj)
+        end
+    end
+end
+
+-- Evento para adicionar novas decals ao serem criadas
+Workspace.DescendantAdded:Connect(function(descendant)
+    if descendant:IsA("Decal") and descendant.Name == "CustomFlagLeft" then
+        scanDecals(descendant)
+    end
+end)
+
+-- Inicia o escaneamento das decals das bandeiras quando o jogo carregar completamente
+startScan()
